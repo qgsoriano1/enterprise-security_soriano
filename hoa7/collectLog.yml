@@ -1,0 +1,27 @@
+---
+- hosts: all
+  become: true
+  tasks:
+
+  - name: UPdate repos index
+    apt:
+      update_cache: yes
+
+  - name: Create repos for the collected log file
+    file:
+      path: /Desktop/LOGF
+      state: directory
+      mode: '0755'
+
+  - name: Fetch the log files
+    fetch:
+      src: /var/log/syslog
+      dest: /tmp/LOGF
+
+  - name: Create journalctl log files
+    shell: journalctl > /Desktop/LOGF/journal.log
+
+  - name: Fetch journalct log file
+    fetch:
+      src: /var/log/syslog
+      dest: /tmp/LOGF
